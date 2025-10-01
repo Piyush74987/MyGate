@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Visitor Management</h2>
+<div id="visitor-actions">
+    <button onclick="approveVisitor('visitor_123')">Approve Visitor</button>
+    <button onclick="denyVisitor('visitor_123')">Deny Visitor</button>
+</div>
+<div id="visitor-result"></div>
+{% endblock %}

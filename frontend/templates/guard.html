@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Guard Dashboard</h2>
+
+<p>Welcome, Guard! Here you can see pending visitors and check them in/out.</p>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Visitor Name</th>
+            <th>Purpose</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="visitorTable">
+        <!-- Visitors will be dynamically populated here -->
+    </tbody>
+</table>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+async function loadVisitors() {
+    // Fetch visitor data from backend (replace with actual endpoint)
+    const res = await fetch('/api/getVisitors'); 
+    const visitors = await res.json();
+    const tbody = document.getElementById('visitorTable');
+    tbody.innerHTML = '';
+
+    visitors.forEach(visitor => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${visitor.name}</td>
+            <td>${visitor.purpose}</td>
+            <td>${visitor.status}</td>
+            <td>
+                ${visitor.status === 'approved' ? `<button onclick="checkin('${visitor.id}')">Check In</button>` : ''}
+                ${visitor.status === 'checked_in' ? `<button onclick="checkout('${visitor.id}')">Check Out</button>` : ''}
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+async function checkin(visitorId) {
+    const res = await fetch('/api/checkin', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({visitorId, userId: 'guard_001', token: 'dummy_token'})
+    });
+    const data = await res.json();
+    console.log(data);
+    loadVisitors();
+}
+
+async function checkout(visitorId) {
+    const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({visitorId, userId: 'guard_001', token: 'dummy_token'})
+    });
+    const data = await res.json();
+    console.log(data);
+    loadVisitors();
+}
+
+// Load visitors when page loads
+window.onload = loadVisitors;
+</script>
+{% endblock %}

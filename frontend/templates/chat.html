@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>AI Copilot Chat</h2>
+<textarea id="chatInput" rows="3" cols="50"></textarea><br>
+<button onclick="sendChat()">Send</button>
+<div id="chatOutput"></div>
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock %}

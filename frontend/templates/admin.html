@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Admin Dashboard</h2>
+
+<p>Welcome, Admin! You can manage all users, guards, and visitor approvals.</p>
+
+<h3>Users</h3>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email/Phone</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="userTable">
+        <!-- Users will be dynamically populated here -->
+    </tbody>
+</table>
+
+<h3>Visitors</h3>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Purpose</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="visitorTable">
+        <!-- Visitors will be dynamically populated here -->
+    </tbody>
+</table>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+async function loadUsers() {
+    // Replace with backend endpoint
+    const res = await fetch('/api/getUsers'); 
+    const users = await res.json();
+    const tbody = document.getElementById('userTable');
+    tbody.innerHTML = '';
+    users.forEach(user => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${user.displayName}</td>
+            <td>${user.email}</td>
+            <td>${user.role}</td>
+            <td><button onclick="changeRole('${user.id}')">Change Role</button></td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+async function loadVisitors() {
+    // Replace with backend endpoint
+    const res = await fetch('/api/getVisitors'); 
+    const visitors = await res.json();
+    const tbody = document.getElementById('visitorTable');
+    tbody.innerHTML = '';
+    visitors.forEach(visitor => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${visitor.name}</td>
+            <td>${visitor.purpose}</td>
+            <td>${visitor.status}</td>
+            <td>
+                ${visitor.status === 'pending' ? `<button onclick="approveVisitor('${visitor.id}')">Approve</button>
+                <button onclick="denyVisitor('${visitor.id}')">Deny</button>` : ''}
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+// Example actions
+function changeRole(userId) { console.log('Change role', userId); }
+function approveVisitor(visitorId) { console.log('Approve visitor', visitorId); }
+function denyVisitor(visitorId) { console.log('Deny visitor', visitorId); }
+
+// Load data on page load
+window.onload = () => {
+    loadUsers();
+    loadVisitors();
+};
+</script>
+{% endblock %}

@@ -1,0 +1,3 @@
+Flask==2.3.3          # For serving the frontend pages and routes
+python-dotenv==1.0.1   # To read .env variables like BACKEND_URL
+requests==2.32.0        # Optional: if frontend calls backend APIs from Python

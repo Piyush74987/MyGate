@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Resident Dashboard</h2>
+
+<h3>Pending Visitors</h3>
+<table border="1" id="visitor-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Purpose</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<h3>AI Copilot Chat</h3>
+<div>
+    <input type="text" id="chat-input" placeholder="Type command e.g. approve Ramesh">
+    <button id="chat-send">Send</button>
+</div>
+<div id="chat-output"></div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}
